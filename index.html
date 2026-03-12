@@ -380,38 +380,46 @@ function initSearch() {
 }
     const API_URL = "https://script.google.com/macros/s/AKfycbwG5BIvQsDrUWl9x_TuIpP_eams4W3NnP70WqedPucF8qU40hNF8v5BdpBHA0enr3IK/exec";
 
-    document.getElementById("feedbackForm").addEventListener("submit",function(e){
-
+document.getElementById("feedbackForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const data={
-    name:document.getElementById("name").value,
-    department:document.getElementById("department").value,
-    message:document.getElementById("message").value
+    const statusEl = document.getElementById("feedbackStatus");
+    statusEl.innerText = "正在送出...";
+    statusEl.style.color = "#1e293b";
+
+    const data = {
+        name: document.getElementById("name").value,
+        department: document.getElementById("department").value,
+        message: document.getElementById("message").value
     };
 
-    fetch(API_URL,{
-    method:"POST",
-    headers:{
-    "Content-Type":"application/json"
-    },
-    body:JSON.stringify(data)
+    // 使用 fetch 發送到 GAS
+    fetch(API_URL, {
+        method: "POST",
+        mode: "no-cors", // 💡 強制不檢查 CORS
+        headers: {
+            "Content-Type": "text/plain" // 💡 改用 text/plain 避開預檢
+        },
+        body: JSON.stringify(data)
     })
-    .then(res => res.text())
-    .then(res => {
-    document.getElementById("feedbackStatus").innerText="✅ 已送出感謝您的建議";
-    document.getElementById("feedbackForm").reset();
+    .then(() => {
+        // 因為是 no-cors，fetch 無法讀取回傳值，只要沒報錯就視為成功
+        statusEl.innerText = "✅ 已送出感謝您的建議";
+        statusEl.style.color = "green";
+        document.getElementById("feedbackForm").reset();
     })
-    .catch(err=>{
-    document.getElementById("feedbackStatus").innerText="❌ 送出失敗";
+    .catch(err => {
+        console.error("錯誤詳細資訊:", err);
+        statusEl.innerText = "❌ 送出失敗，請確認網路或聯絡管理員";
+        statusEl.style.color = "red";
     });
-
-    });
+});
 
 </script>
 
 </body>
 
 </html>
+
 
 
