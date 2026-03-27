@@ -221,7 +221,7 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-            }
+            }        
 
             .feedback-box h2{
             color: var(--text-dark);
@@ -244,9 +244,26 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);          
             transition: all 0.3s ease;          
             margin-bottom:10px;  
-            resize: none;           /* textarea 不可拖拉大小 */
-            outline: none;          /* 移除點擊黑色外框 */
-            box-sizing: border-box; /* 避免padding影響寬度 */
+            resize: none;           
+            outline: none;          
+            box-sizing: border-box; 
+            }
+            .feedback-box input:-webkit-autofill,
+            .feedback-box input:-webkit-autofill:hover, 
+            .feedback-box input:-webkit-autofill:focus,
+            .feedback-box textarea:-webkit-autofill,
+            .feedback-box textarea:-webkit-autofill:hover,
+            .feedback-box textarea:-webkit-autofill:focus{               
+            -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.6) inset !important;                
+            -webkit-text-fill-color: #1e293b !important;                
+            transition: background-color 5000s ease-in-out 0s;
+            }
+
+            
+            .feedback-box input:focus,
+            .feedback-box textarea:focus {
+                background: rgba(255, 255, 255, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.8);
             }
 
             .feedback-box button{
