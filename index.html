@@ -207,7 +207,7 @@
 
         .feedback-box{
             max-width:250px;
-            width:50%;            
+            width:50%;         
             margin-top:50px;
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -221,7 +221,7 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-            }        
+            }
 
             .feedback-box h2{
             color: var(--text-dark);
@@ -244,22 +244,27 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);          
             transition: all 0.3s ease;          
             margin-bottom:10px;  
-            resize: none;           
-            outline: none;          
-            box-sizing: border-box; 
+            resize: none;           /* textarea 不可拖拉大小 */
+            outline: none;          /* 移除點擊黑色外框 */
+            box-sizing: border-box; /* 避免padding影響寬度 */
             }
+
+            /* 2. 新增：強制解決「自動填入」導致的變色問題 */
             .feedback-box input:-webkit-autofill,
             .feedback-box input:-webkit-autofill:hover, 
             .feedback-box input:-webkit-autofill:focus,
             .feedback-box textarea:-webkit-autofill,
             .feedback-box textarea:-webkit-autofill:hover,
-            .feedback-box textarea:-webkit-autofill:focus{               
-            -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.6) inset !important;                
-            -webkit-text-fill-color: #1e293b !important;                
-            transition: background-color 5000s ease-in-out 0s;
+            .feedback-box textarea:-webkit-autofill:focus {
+                /* 使用巨大的內陰影來覆蓋掉瀏覽器的預設藍色 */
+                -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.6) inset !important;
+                /* 設定自動填入後的文字顏色，確保可見 */
+                -webkit-text-fill-color: #1e293b !important;
+                /* 這裡透過 transition 延遲背景色的變化，讓它看起來像沒變 */
+                transition: background-color 5000s ease-in-out 0s;
             }
 
-            
+            /* 3. 額外建議：滑鼠點擊時稍微亮一點，增加互動感 */
             .feedback-box input:focus,
             .feedback-box textarea:focus {
                 background: rgba(255, 255, 255, 0.4);
@@ -344,6 +349,9 @@
 <footer>By C.F.M </footer>
 
 <script>
+    if (navigator.userAgent.indexOf('Line') > -1) {
+    alert("建議點擊右上角「...」，選擇「使用預設瀏覽器開啟」，以確保文件能正常下載。");
+}
 // 1. 從 data.json 獲取資料
 fetch('data.json')
     .then(response => {
@@ -369,7 +377,7 @@ fetch('data.json')
                     </div>
                 </div>
                 <div>
-                    <a href="${item.file}" download class="download-btn">下載文件</a>
+                    <a href="${item.file}" target="_blank" rel="noopener noreferrer" class="download-btn">下載文件</a>
                     <div class="update-tag">最後更新：${item.date}</div>
                 </div>
             `;
@@ -402,7 +410,7 @@ function initSearch() {
         noResult.style.display = visibleCount === 0 ? "block" : "none";
     });
 }
-    const API_URL = "https://script.google.com/macros/s/AKfycbwG5BIvQsDrUWl9x_TuIpP_eams4W3NnP70WqedPucF8qU40hNF8v5BdpBHA0enr3IK/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyjgktOY3W4tDhuMJ26K1JQRuCmSKmkz_TVcuMFLOhFsb4tda-ckorzY94KC6GIR2k/exec";
 
 document.getElementById("feedbackForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -438,12 +446,7 @@ document.getElementById("feedbackForm").addEventListener("submit", function(e) {
         statusEl.style.color = "red";
     });
 });
-
 </script>
 
 </body>
-
 </html>
-
-
-
